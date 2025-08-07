@@ -1,0 +1,745 @@
+<!DOCTYPE html>
+<html lang="id">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Trans7 - Dimensi Baru Hiburan</title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/uikit@3.16.22/dist/css/uikit.min.css"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.22/dist/js/uikit.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/uikit@3.16.22/dist/js/uikit-icons.min.js"></script>
+    <style>
+      #scroll-controls {
+        opacity: 0.7;
+        transition: opacity 0.3s;
+      }
+      #scroll-controls:hover {
+        opacity: 1;
+      }
+
+      :root {
+        --primary-gradient: linear-gradient(135deg, #ff3366, #ff9933);
+        --secondary-gradient: linear-gradient(135deg, #3366ff, #33ccff);
+        --dark-gradient: linear-gradient(135deg, #1a1a2e, #16213e);
+      }
+
+      body {
+        background: var(--dark-gradient);
+        color: white;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        overflow-x: hidden;
+      }
+
+      .hero-section {
+        height: 100vh;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .hero-video {
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        z-index: -1;
+        opacity: 0.7;
+        transition: opacity 0.5s ease;
+      }
+
+      .hero-content {
+        position: relative;
+        z-index: 2;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: center;
+        text-align: center;
+        padding: 0 20px;
+      }
+
+      .parallax-layer {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        z-index: 1;
+        background: rgba(0, 0, 0, 0.2);
+      }
+
+      .svg-animation {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        top: 0;
+        left: 0;
+        pointer-events: none;
+      }
+
+      .section {
+        padding: 100px 0;
+        position: relative;
+        overflow: hidden;
+      }
+
+      .section-title {
+        font-size: 3rem;
+        font-weight: 700;
+        margin-bottom: 2rem;
+        position: relative;
+        display: inline-block;
+      }
+
+      .section-title::after {
+        content: '';
+        position: absolute;
+        bottom: -10px;
+        left: 0;
+        width: 100%;
+        height: 4px;
+        background: var(--primary-gradient);
+      }
+
+      .program-card {
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 15px;
+        overflow: hidden;
+        transition: all 0.4s ease;
+        height: 100%;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .program-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 30px rgba(0, 0, 0, 0.3);
+        background: rgba(255, 255, 255, 0.15);
+      }
+
+      .program-image {
+        height: 200px;
+        width: 100%;
+        object-fit: cover;
+      }
+
+      .form-container {
+        background: rgba(255, 255, 255, 0.05);
+        border-radius: 20px;
+        padding: 40px;
+        backdrop-filter: blur(10px);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+      }
+
+      .footer {
+        background: rgba(0, 0, 0, 0.3);
+        padding: 30px 0;
+        border-top: 1px solid rgba(255, 255, 255, 0.1);
+      }
+
+      .glow-text {
+        text-shadow: 0 0 10px rgba(255, 255, 255, 0.7);
+      }
+
+      .particle {
+        position: absolute;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.5);
+        animation: float 15s infinite ease-in-out;
+        z-index: 2;
+      }
+
+      @keyframes float {
+        0%,
+        100% {
+          transform: translate(0, 0);
+          opacity: 0.8;
+        }
+        25% {
+          transform: translate(20px, 20px);
+          opacity: 1;
+        }
+        50% {
+          transform: translate(0, 40px);
+          opacity: 0.8;
+        }
+        75% {
+          transform: translate(-20px, 20px);
+          opacity: 0.6;
+        }
+      }
+
+      /* Efek glow lebih halus */
+      .glow-text {
+        text-shadow: 0 0 15px rgba(255, 51, 102, 0.7),
+          0 0 30px rgba(255, 153, 51, 0.5);
+        transition: text-shadow 0.5s ease;
+      }
+
+      /* Responsivitas tambahan */
+      @media (max-width: 960px) {
+        .hero-content h1 {
+          font-size: 3rem !important;
+        }
+        .hero-content .uk-text-lead {
+          font-size: 1.2rem;
+        }
+      }
+
+      .logo {
+        font-size: 2.5rem;
+        font-weight: 800;
+        background: var(--primary-gradient);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+      }
+
+      /* PERBAIKAN: Animasi lebih presisi */
+      .precise-animation {
+        transition-timing-function: cubic-bezier(0.19, 1, 0.22, 1);
+        will-change: transform, opacity;
+      }
+
+      /* Efek untuk form yang lebih smooth */
+      .form-animation-wrapper {
+        overflow: hidden;
+        border-radius: 20px;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Hero Section dengan Video dan Parallax - PERBAIKAN -->
+    <section
+      class="hero-section"
+      uk-parallax="bgy: -300; opacity: 0,1; viewport: 0.8; easing: 0.1; duration: 800"
+    >
+      <video
+        class="hero-video"
+        autoplay
+        loop
+        muted
+        playsinline
+        uk-video="autoplay: inview"
+      >
+        <source
+          src="https://assets.codepen.io/3364143/screen-record_1.mp4"
+          type="video/mp4"
+        />
+      </video>
+
+      <!-- Layer Parallax dengan efek lebih halus -->
+      <div
+        class="parallax-layer"
+        uk-parallax="bgy: -150; easing: 0.05; duration: 1200"
+      ></div>
+
+      <div class="hero-content">
+        <div
+          uk-parallax="y: 100,0; opacity: 0,1; viewport: 0.7; easing: 0.1; duration: 900"
+        >
+          <h1 class="uk-heading-primary glow-text" style="font-size: 4rem">
+            TRANS<span style="color: #ff3366">7</span>
+          </h1>
+          <p
+            class="uk-text-lead"
+            uk-parallax="y: 150,0; opacity: 0,1; delay: 300; viewport: 0.7; easing: 0.1; duration: 900"
+          >
+            Selamat Datang di Dimensi Baru Hiburan
+          </p>
+          <div
+            uk-parallax="y: 200,0; opacity: 0,1; delay: 500; viewport: 0.7; easing: 0.1; duration: 900"
+          >
+            <button class="uk-button uk-button-primary uk-margin-small-right">
+              Jelajahi Sekarang
+            </button>
+            <button class="uk-button uk-button-default">Tonton Langsung</button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SVG Animation dengan efek lebih presisi -->
+      <div
+        class="svg-animation"
+        uk-parallax="scale: 1,1.2; opacity: 0.3,0; viewport: 0.8; easing: 0.05; duration: 1000"
+      >
+        <svg
+          viewBox="0 0 100 100"
+          xmlns="http://www.w3.org/2000/svg"
+          style="width: 100%; height: 100%"
+        >
+          <path
+            fill="none"
+            stroke="#ff3366"
+            stroke-width="0.5"
+            stroke-dasharray="5 2"
+            d="M10,10 C20,20 40,20 50,10 C60,20 80,20 90,10"
+            uk-parallax="stroke-dashoffset: 100,0; duration: 2000; viewport: 0.8; easing: 0.05"
+          >
+            <animate
+              attributeName="d"
+              values="M10,10 C20,20 40,20 50,10 C60,20 80,20 90,10; M10,50 C20,40 40,60 50,50 C60,60 80,40 90,50; M10,90 C20,80 40,80 50,90 C60,80 80,80 90,90; M10,10 C20,20 40,20 50,10 C60,20 80,20 90,10"
+              dur="15s"
+              repeatCount="indefinite"
+            />
+          </path>
+        </svg>
+      </div>
+
+      <!-- Floating Particles dengan timing lebih baik -->
+      <div
+        class="particle"
+        style="width: 10px; height: 10px; top: 20%; left: 30%"
+        uk-parallax="x: 50,-50; viewport: 0.8; easing: 0.05; duration: 1000"
+      ></div>
+      <div
+        class="particle"
+        style="width: 15px; height: 15px; top: 60%; left: 70%"
+        uk-parallax="x: -70,70; viewport: 0.8; easing: 0.05; duration: 1000"
+      ></div>
+      <div
+        class="particle"
+        style="width: 8px; height: 8px; top: 40%; left: 10%"
+        uk-parallax="y: 100,-100; viewport: 0.8; easing: 0.05; duration: 1000"
+      ></div>
+
+      <!-- Scroll Indicator -->
+      <div
+        class="uk-position-bottom-center uk-position-medium uk-text-center"
+        uk-parallax="opacity: 1,0; y: -30,30; viewport: 0.3"
+      >
+        <div
+          uk-icon="icon: chevron-down; ratio: 2"
+          class="uk-animation-fade"
+        ></div>
+      </div>
+    </section>
+
+    <!-- Program Unggulan dengan Filter -->
+    <section class="section">
+      <div class="uk-container">
+        <h2 class="section-title" uk-parallax="y: 100,0; opacity: 0,1">
+          Program Unggulan
+        </h2>
+
+        <!-- Filter Switcher dengan Animasi -->
+        <ul
+          class="uk-subnav uk-subnav-pill uk-flex-center"
+          uk-switcher="animation: uk-animation-fade; connect: .program-switcher"
+        >
+          <li><a href="#">Semua</a></li>
+          <li><a href="#">Hiburan</a></li>
+          <li><a href="#">Berita</a></li>
+          <li><a href="#">Olahraga</a></li>
+        </ul>
+
+        <ul class="uk-switcher program-switcher uk-margin-large-top">
+          <li>
+            <div
+              class="uk-grid uk-grid-match uk-child-width-1-3@m"
+              uk-grid
+              uk-scrollspy="cls: uk-animation-slide-bottom; target: .program-card; delay: 300"
+            >
+              <!-- Program 1 -->
+              <div>
+                <div class="program-card">
+                  <div class="uk-card-media-top">
+                    <img
+                      src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=400&q=80"
+                      alt="Program 1"
+                      class="program-image"
+                    />
+                  </div>
+                  <div class="uk-card-body">
+                    <h3 class="uk-card-title">Tonight Show</h3>
+                    <p>
+                      Acara talkshow malam dengan bintang tamu terkenal dan
+                      segmen interaktif.
+                    </p>
+                    <div class="uk-flex uk-flex-between">
+                      <span class="uk-label uk-label-success">Hiburan</span>
+                      <span>Setiap Hari, 20:00 WIB</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Program 2 -->
+              <div>
+                <div class="program-card">
+                  <div class="uk-card-media-top">
+                    <img
+                      src="https://images.unsplash.com/photo-1563986768609-322da13575f3?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=400&q=80"
+                      alt="Program 2"
+                      class="program-image"
+                    />
+                  </div>
+                  <div class="uk-card-body">
+                    <h3 class="uk-card-title">Jurnal Pagi</h3>
+                    <p>
+                      Berita terkini dan analisis mendalam tentang isu-isu
+                      terkini.
+                    </p>
+                    <div class="uk-flex uk-flex-between">
+                      <span class="uk-label uk-label-warning">Berita</span>
+                      <span>Setiap Pagi, 06:00 WIB</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Program 3 -->
+              <div>
+                <div class="program-card">
+                  <div class="uk-card-media-top">
+                    <img
+                      src="https://images.unsplash.com/photo-1574375927938-d5a98e8ffe85?ixlib=rb-1.2.1&auto=format&fit=crop&w=600&h=400&q=80"
+                      alt="Program 3"
+                      class="program-image"
+                    />
+                  </div>
+                  <div class="uk-card-body">
+                    <h3 class="uk-card-title">Liga Champions</h3>
+                    <p>
+                      Pertandingan eksklusif dan analisis mendalam dari
+                      kompetisi sepak bola Eropa.
+                    </p>
+                    <div class="uk-flex uk-flex-between">
+                      <span class="uk-label uk-label-danger">Olahraga</span>
+                      <span>Rabu & Kamis, 01:30 WIB</span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </li>
+
+          <!-- Tab lainnya dengan konten berbeda -->
+          <li>Konten Hiburan</li>
+          <li>Konten Berita</li>
+          <li>Konten Olahraga</li>
+        </ul>
+      </div>
+    </section>
+
+    <!-- Form Kontak dengan Animasi - PERBAIKAN UTAMA -->
+    <section class="section">
+      <div class="uk-container">
+        <div class="uk-grid uk-grid-large uk-flex-middle" uk-grid>
+          <div
+            class="uk-width-1-2@m"
+            uk-parallax="x: -100,0; opacity: 0,1; viewport: 0.5; easing: 0.1; duration: 800"
+          >
+            <h2 class="section-title">Bergabunglah Dengan Kami</h2>
+            <p class="uk-text-lead">
+              Dapatkan update terbaru program acara dan penawaran eksklusif
+            </p>
+            <p>
+              Dengan bergabung di newsletter kami, Anda akan menjadi yang
+              pertama mengetahui acara spesial, konten eksklusif, dan penawaran
+              menarik dari Trans7.
+            </p>
+
+            <div
+              class="uk-margin-medium-top"
+              uk-parallax="y: 50,0; opacity: 0,1; delay: 300; viewport: 0.5; easing: 0.1; duration: 800"
+            >
+              <div class="uk-grid uk-grid-small" uk-grid>
+                <div class="uk-width-auto">
+                  <span
+                    class="uk-icon-button uk-margin-small-right"
+                    uk-icon="check"
+                  ></span>
+                </div>
+                <div class="uk-width-expand">
+                  <p>Update program acara mingguan</p>
+                </div>
+              </div>
+              <div class="uk-grid uk-grid-small" uk-grid>
+                <div class="uk-width-auto">
+                  <span
+                    class="uk-icon-button uk-margin-small-right"
+                    uk-icon="check"
+                  ></span>
+                </div>
+                <div class="uk-width-expand">
+                  <p>Konten eksklusif untuk member</p>
+                </div>
+              </div>
+              <div class="uk-grid uk-grid-small" uk-grid>
+                <div class="uk-width-auto">
+                  <span
+                    class="uk-icon-button uk-margin-small-right"
+                    uk-icon="check"
+                  ></span>
+                </div>
+                <div class="uk-width-expand">
+                  <p>Kesempatan memenangkan hadiah menarik</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div
+            class="uk-width-1-2@m form-animation-wrapper precise-animation"
+            uk-parallax="x: 100,0; opacity: 0,1; viewport: 0.5; easing: 0.1; duration: 800"
+          >
+            <div class="form-container">
+              <form class="uk-form-stacked">
+                <div class="uk-margin">
+                  <label class="uk-form-label" for="name">Nama Lengkap</label>
+                  <div class="uk-form-controls">
+                    <input
+                      class="uk-input"
+                      id="name"
+                      type="text"
+                      placeholder="Masukkan nama Anda"
+                    />
+                  </div>
+                </div>
+
+                <div class="uk-margin">
+                  <label class="uk-form-label" for="email">Email</label>
+                  <div class="uk-form-controls">
+                    <input
+                      class="uk-input"
+                      id="email"
+                      type="email"
+                      placeholder="email@contoh.com"
+                    />
+                  </div>
+                </div>
+
+                <div class="uk-margin">
+                  <label class="uk-form-label">Program Favorit</label>
+                  <div class="uk-form-controls">
+                    <select class="uk-select">
+                      <option>Tonight Show</option>
+                      <option>Jurnal Pagi</option>
+                      <option>Liga Champions</option>
+                      <option>Semua Program</option>
+                    </select>
+                  </div>
+                </div>
+
+                <div class="uk-margin">
+                  <label class="uk-form-label">Pesan</label>
+                  <div class="uk-form-controls">
+                    <textarea
+                      class="uk-textarea"
+                      rows="3"
+                      placeholder="Tulis pesan Anda..."
+                    ></textarea>
+                  </div>
+                </div>
+
+                <div class="uk-margin">
+                  <button
+                    class="uk-button uk-button-primary uk-width-1-1"
+                    type="submit"
+                  >
+                    Daftar Sekarang
+                  </button>
+                </div>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+      <div class="uk-container">
+        <div class="uk-grid uk-grid-large" uk-grid>
+          <div class="uk-width-1-4@m">
+            <h3 class="logo">TRANS7</h3>
+            <p>Dimensi Baru Hiburan Indonesia</p>
+          </div>
+
+          <div class="uk-width-1-4@m">
+            <h4>Navigasi</h4>
+            <ul class="uk-nav uk-nav-default">
+              <li><a href="#">Beranda</a></li>
+              <li><a href="#">Program</a></li>
+              <li><a href="#">Jadwal</a></li>
+              <li><a href="#">Tentang Kami</a></li>
+            </ul>
+          </div>
+
+          <div class="uk-width-1-4@m">
+            <h4>Program</h4>
+            <ul class="uk-nav uk-nav-default">
+              <li><a href="#">Hiburan</a></li>
+              <li><a href="#">Berita</a></li>
+              <li><a href="#">Olahraga</a></li>
+              <li><a href="#">Anak-Anak</a></li>
+            </ul>
+          </div>
+
+          <div class="uk-width-1-4@m">
+            <h4>Kontak</h4>
+            <p>Jl. M.T. Haryono Kav. 17-18<br />Jakarta Selatan, 12810</p>
+            <p>Email: info@trans7.co.id<br />Telp: (021) 798-3456</p>
+          </div>
+        </div>
+
+        <div class="uk-margin-large-top uk-text-center">
+          <p>&copy; 20xx Trans7. All Rights Reserved.</p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Floating Scroll Control (UIkit) -->
+    <div
+      id="scroll-controls"
+      class="uk-position-fixed uk-position-bottom-right uk-padding-small"
+      style="z-index: 9999"
+    >
+      <div
+        class="uk-card uk-card-default uk-card-small uk-padding-small uk-box-shadow-medium"
+      >
+        <!-- Start/Stop Button -->
+        <button
+          id="toggleScroll"
+          class="uk-button uk-button-primary uk-button-small"
+        >
+          Start
+        </button>
+
+        <!-- Speed Controls -->
+        <div class="uk-flex uk-flex-middle uk-margin-small-top">
+          <button
+            id="decreaseSpeed"
+            class="uk-button uk-button-default uk-button-small uk-margin-small-right"
+          >
+            −
+          </button>
+          <span id="speedValue">3</span>
+          <button
+            id="increaseSpeed"
+            class="uk-button uk-button-default uk-button-small uk-margin-small-left"
+          >
+            +
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Floating Scroll Control (UIkit) -->
+    <script>
+      let isScrolling = false;
+      let scrollSpeedLevel = 3; // Default speed level (1-5)
+      let scrollInterval;
+
+      function getScrollPixels(level) {
+        // Kecepatan (semakin tinggi, semakin cepat)
+        return level; // Misalnya level 1 = 1px per step, level 5 = 5px per step
+      }
+
+      function startScrolling() {
+        if (isScrolling) return;
+
+        isScrolling = true;
+        document.getElementById('toggleScroll').textContent = 'Stop';
+
+        scrollInterval = setInterval(() => {
+          window.scrollBy(0, getScrollPixels(scrollSpeedLevel));
+
+          if (
+            window.innerHeight + window.scrollY >=
+            document.body.offsetHeight
+          ) {
+            stopScrolling(); // Stop saat sudah sampai bawah
+          }
+        }, 10); // Semakin kecil, semakin halus
+      }
+
+      function stopScrolling() {
+        isScrolling = false;
+        document.getElementById('toggleScroll').textContent = 'Start';
+        clearInterval(scrollInterval);
+      }
+
+      // Toggle scroll
+      document.getElementById('toggleScroll').addEventListener('click', () => {
+        if (isScrolling) {
+          stopScrolling();
+        } else {
+          startScrolling();
+        }
+      });
+
+      // Speed Control
+      document.getElementById('increaseSpeed').addEventListener('click', () => {
+        if (scrollSpeedLevel < 5) {
+          scrollSpeedLevel++;
+          document.getElementById('speedValue').textContent = scrollSpeedLevel;
+        }
+      });
+
+      document.getElementById('decreaseSpeed').addEventListener('click', () => {
+        if (scrollSpeedLevel > 1) {
+          scrollSpeedLevel--;
+          document.getElementById('speedValue').textContent = scrollSpeedLevel;
+        }
+      });
+
+      startScrolling();
+    </script>
+
+    <!-- UIkit Initialization -->
+    <script>
+      // Inisialisasi komponen UIkit
+      UIkit.util.ready(function () {
+        // Animasi tambahan untuk efek paralaks
+        const sections = document.querySelectorAll('.section');
+
+        sections.forEach((section) => {
+          UIkit.scrollspy(section, {
+            cls: 'uk-animation-slide-bottom-small',
+            delay: 300,
+            repeat: true,
+          });
+        });
+
+        // Efek filter warna dinamis saat scroll
+        window.addEventListener('scroll', function () {
+          const scrollPosition = window.scrollY;
+          const hue = (scrollPosition / 10) % 360;
+          document.documentElement.style.setProperty(
+            '--primary-gradient',
+            `linear-gradient(135deg, hsl(${hue}, 100%, 60%), hsl(${
+              (hue + 60) % 360
+            }, 100%, 60%)`
+          );
+        });
+
+        // PERBAIKAN: Menonaktifkan parallax di mobile
+        function handleResponsiveParallax() {
+          const parallaxElements = document.querySelectorAll('[uk-parallax]');
+
+          if (window.innerWidth < 768) {
+            parallaxElements.forEach((el) => {
+              UIkit.parallax(el, { disabled: true });
+            });
+          } else {
+            parallaxElements.forEach((el) => {
+              UIkit.parallax(el, { disabled: false });
+            });
+          }
+        }
+
+        // Jalankan saat load dan resize
+        handleResponsiveParallax();
+        window.addEventListener('resize', handleResponsiveParallax);
+      });
+    </script>
+  </body>
+</html>
